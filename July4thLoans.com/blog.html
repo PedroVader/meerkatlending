@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Blog</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Jost", Arial, sans-serif;
+      color: #30323d;
+      margin: 0;
+      min-width: 320px;
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 100%;
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+      max-width: 1140px;
+    }
+
+    .page-title {
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 34px;
+      letter-spacing: 0.69px;
+      color: #30323d;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .page-title {
+        margin-bottom: 40px;
+        font-size: 44px;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .animate-fadeInUp:nth-child(1) { animation-delay: 0.1s; }
+    .animate-fadeInUp:nth-child(2) { animation-delay: 0.2s; }
+    .animate-fadeInUp:nth-child(3) { animation-delay: 0.3s; }
+    .animate-fadeInUp:nth-child(4) { animation-delay: 0.4s; }
+    .animate-fadeInUp:nth-child(5) { animation-delay: 0.5s; }
+
+    .blog-card {
+      padding: 20px;
+      border: 1px solid #eaeced;
+      border-radius: 4px;
+      background-color: #fff;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .blog-card {
+        padding: 40px;
+      }
+    }
+
+    .blog-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(33, 38, 98, 0.15);
+      border-color: #949dff;
+    }
+
+    .blog-card + .blog-card {
+      margin-top: 30px;
+    }
+
+    .blog-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 20px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      line-height: 1.25;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 0;
+      border-radius: 6px;
+      background-color: #212662;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .blog-btn:hover {
+      color: #000;
+      background-color: #bac0ff;
+      text-decoration: none;
+    }
+
+    .blog-btn:active {
+      color: #fff;
+      background-color: #212662;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      color: #212662;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: 1px solid #212662;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      margin-bottom: 30px;
+    }
+
+    .back-btn:hover {
+      background-color: #212662;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .date-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #212662;
+      background-color: #efeff7;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      color: #30323d;
+      font-size: 1.5rem;
+      margin: 16px 0 12px 0;
+      line-height: 1.2;
+    }
+
+    @media (min-width: 768px) {
+      .blog-title {
+        font-size: 2rem;
+        margin: 20px 0 16px 0;
+      }
+    }
+
+    .blog-excerpt {
+      color: #30323d;
+      font-size: 1rem;
+      line-height: 1.4;
+      margin: 12px 0;
+    }
+
+    .loading-skeleton {
+      background: linear-gradient(90deg, #efeff7 25%, #d7d7eb 50%, #efeff7 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 4px;
+    }
+
+    .blog-divider {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 3px;
+      margin: 20px auto;
+      background-color: #949dff;
+      border-radius: 2px;
+    }
+
+    .page-background {
+      background: linear-gradient(180deg, #fff 0%, #efeff7 100%);
+      min-height: 100vh;
+    }
+
+    .blog-icon {
+      fill: #949dff;
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Estilos para vista de artículo */
+    .article-container {
+      max-width: 800px;
+    }
+
+    .article-header {
+      text-align: center;
+      padding: 60px 0 40px;
+      border-bottom: 1px solid #eaeced;
+      margin-bottom: 40px;
+    }
+
+    .article-title {
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: #30323d;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .article-title {
+        font-size: 2rem;
+      }
+    }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .article-content {
+      background: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(33, 38, 98, 0.08);
+      margin-bottom: 40px;
+      line-height: 1.7;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .article-content {
+        padding: 20px;
+        font-size: 1rem;
+      }
+    }
+
+    .article-content h2 {
+      font-weight: 700;
+      font-size: 1.75rem;
+      color: #30323d;
+      margin: 32px 0 16px 0;
+    }
+
+    .article-content h3 {
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: #30323d;
+      margin: 28px 0 14px 0;
+    }
+
+    .article-content p {
+      margin-bottom: 20px;
+      color: #30323d;
+    }
+
+    .article-content ul, .article-content ol {
+      margin: 20px 0;
+      padding-left: 24px;
+    }
+
+    .article-content li {
+      margin-bottom: 8px;
+    }
+
+    .article-content blockquote {
+      border-left: 4px solid #949dff;
+      padding-left: 20px;
+      margin: 24px 0;
+      font-style: italic;
+      color: #555;
+    }
+
+    .article-content code {
+      background-color: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    .article-content pre {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Estilos de paginación */
+    .pagination-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 60px;
+      gap: 20px;
+    }
+
+    .pagination-info {
+      color: #666;
+      font-size: 0.875rem;
+      text-align: center;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .pagination-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      height: 40px;
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #212662;
+      text-decoration: none;
+      border: 1px solid #eaeced;
+      border-radius: 6px;
+      background-color: #fff;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .pagination-btn:hover:not(.disabled):not(.active) {
+      background-color: #efeff7;
+      border-color: #949dff;
+      text-decoration: none;
+    }
+
+    .pagination-btn.active {
+      background-color: #212662;
+      color: #fff;
+      border-color: #212662;
+    }
+
+    .pagination-btn.disabled {
+      color: #ccc;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .pagination-btn.disabled:hover {
+      background-color: #fff;
+      border-color: #eaeced;
+    }
+
+    .pagination-ellipsis {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      height: 40px;
+      color: #666;
+      font-weight: 600;
+    }
+
+    .posts-per-page {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .posts-per-page select {
+      padding: 6px 12px;
+      border: 1px solid #eaeced;
+      border-radius: 4px;
+      background-color: #fff;
+      color: #30323d;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    .posts-per-page select:focus {
+      outline: none;
+      border-color: #949dff;
+    }
+
+    @media (max-width: 767.98px) {
+      .blog-card {
+        padding: 15px;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+      }
+
+      .pagination {
+        gap: 4px;
+      }
+
+      .pagination-btn {
+        min-width: 36px;
+        height: 36px;
+        padding: 6px 10px;
+        font-size: 0.75rem;
+      }
+
+      .pagination-container {
+        margin-top: 40px;
+        gap: 16px;
+      }
+    }
+
+    .home-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  color: #212662;
+  background-color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid #212662;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(33, 38, 98, 0.15);
+  transition: all 0.3s ease;
+}
+
+.home-btn:hover {
+  background-color: #212662;
+  color: #fff;
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(33, 38, 98, 0.25);
+}
+
+@media (max-width: 768px) {
+  .home-btn {
+    top: 15px;
+    right: 15px;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+  
+  .home-btn svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+  }
+}
+    /* Loading state para paginación */
+    .pagination-loading {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="page-background">
+  <!-- Vista de Lista de Posts -->
+  <main id="blog-list-view" class="container" style="padding-top: 30px; padding-bottom: 30px;">
+    <div style="text-align: center; margin-bottom: 48px;">
+      <h1 class="page-title">Blog</h1>
+      <div class="blog-divider"></div>
+      <p style="color: #30323d; font-size: 1.125rem; max-width: 600px; margin: 0 auto; line-height: 1.4;">
+        Explore top lenders, discover the best loan options, and secure unbeatable terms tailored to your needs.
+      </p>
+    </div>
+
+    <!-- Botón Home -->
+<a href="/July4thLoans.com/index.html" class="home-btn" style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+  <svg style="width: 20px; height: 20px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+    <polyline points="9,22 9,12 15,12 15,22"/>
+  </svg>
+  Home
+</a>
+
+    <!-- Controles de posts por página -->
+    <div class="posts-per-page" style="margin-bottom: 30px; justify-content: center;">
+      <span>Show:</span>
+      <select id="postsPerPage" onchange="changePostsPerPage(this.value)">
+        <option value="6">6 posts</option>
+        <option value="9" selected>9 posts</option>
+        <option value="12">12 posts</option>
+        <option value="18">18 posts</option>
+      </select>
+      <span>per page</span>
+    </div>
+
+    <div id="blog-posts" class="space-y-8">
+      <div class="skeleton-posts">
+        <div class="blog-card">
+          <div class="loading-skeleton" style="height: 20px; width: 120px; margin-bottom: 16px;"></div>
+          <div class="loading-skeleton" style="height: 32px; width: 80%; margin-bottom: 12px;"></div>
+          <div class="loading-skeleton" style="height: 60px; width: 100%; margin-bottom: 16px;"></div>
+          <div class="loading-skeleton" style="height: 32px; width: 100px;"></div>
+        </div>
+        <div class="blog-card">
+          <div class="loading-skeleton" style="height: 20px; width: 100px; margin-bottom: 16px;"></div>
+          <div class="loading-skeleton" style="height: 32px; width: 75%; margin-bottom: 12px;"></div>
+          <div class="loading-skeleton" style="height: 48px; width: 100%; margin-bottom: 16px;"></div>
+          <div class="loading-skeleton" style="height: 32px; width: 100px;"></div>
+        </div>
+        <div class="blog-card">
+          <div class="loading-skeleton" style="height: 20px; width: 110px; margin-bottom: 16px;"></div>
+          <div class="loading-skeleton" style="height: 32px; width: 85%; margin-bottom: 12px;"></div>
+          <div class="loading-skeleton" style="height: 56px; width: 100%; margin-bottom: 16px;"></div>
+          <div class="loading-skeleton" style="height: 32px; width: 100px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paginación -->
+    <div id="pagination-container" class="pagination-container hidden">
+      <div class="pagination-info" id="pagination-info">
+        Mostrando 1-9 de 25 artículos
+      </div>
+      
+      <nav class="pagination" id="pagination">
+        <!-- Se generará dinámicamente -->
+      </nav>
+    </div>
+  </main>
+
+  <!-- Vista de Artículo Individual -->
+  <main id="blog-article-view" class="container article-container hidden" style="padding-top: 30px; padding-bottom: 30px;">
+    <a href="#" id="back-to-blog" class="back-btn">
+      <svg style="width: 16px; height: 16px; margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Volver al blog
+    </a>
+
+    <header class="article-header">
+      <div id="loading-article-header" class="loading-content">
+        <div class="loading-skeleton" style="height: 40px; width: 80%; margin: 0 auto 20px;"></div>
+        <div class="loading-skeleton" style="height: 20px; width: 200px; margin: 0 auto 20px;"></div>
+        <div class="loading-skeleton" style="height: 3px; width: 60px; margin: 0 auto;"></div>
+      </div>
+      
+      <div id="article-header-content" class="hidden">
+        <h1 class="article-title" id="article-title-display"></h1>
+        <div class="article-meta">
+          <span class="date-badge" id="article-published-date"></span>
+          <span>•</span>
+          <span id="article-reading-time">5 min of reading time</span>
+        </div>
+        <div class="blog-divider"></div>
+      </div>
+    </header>
+
+    <article class="article-content">
+      <div id="loading-article-content" class="loading-content">
+        <div class="loading-skeleton" style="height: 20px; width: 100%; margin-bottom: 16px;"></div>
+        <div class="loading-skeleton" style="height: 20px; width: 95%; margin-bottom: 16px;"></div>
+        <div class="loading-skeleton" style="height: 20px; width: 90%; margin-bottom: 32px;"></div>
+        <div class="loading-skeleton" style="height: 24px; width: 70%; margin-bottom: 16px;"></div>
+        <div class="loading-skeleton" style="height: 20px; width: 100%; margin-bottom: 16px;"></div>
+        <div class="loading-skeleton" style="height: 20px; width: 85%; margin-bottom: 32px;"></div>
+        <div class="loading-skeleton" style="height: 20px; width: 75%; margin-bottom: 16px;"></div>
+        <div class="loading-skeleton" style="height: 20px; width: 100%; margin-bottom: 16px;"></div>
+      </div>
+      
+      <div id="article-content-display" class="hidden"></div>
+    </article>
+  </main>
+
+  <script>
+    const projectId = 'oteia3e6';
+    const dataset = 'production';
+    let currentView = 'list';
+    let currentSlug = null;
+    let currentPage = 1;
+    let postsPerPage = 9;
+    let totalPosts = 0;
+    let allPosts = [];
+    let isLoading = false;
+
+    // Router simple
+    function handleRoute() {
+      const hash = window.location.hash.slice(1);
+      
+      if (hash.startsWith('article/')) {
+        const slug = hash.replace('article/', '');
+        showArticle(slug);
+      } else if (hash.startsWith('page/')) {
+        const page = parseInt(hash.replace('page/', '')) || 1;
+        currentPage = page;
+        showBlogList();
+      } else {
+        currentPage = 1;
+        showBlogList();
+      }
+    }
+
+    function showBlogList() {
+      currentView = 'list';
+      document.getElementById('blog-list-view').classList.remove('hidden');
+      document.getElementById('blog-article-view').classList.add('hidden');
+      document.getElementById('page-title').textContent = 'Blog';
+      
+      if (allPosts.length === 0) {
+        fetchAllPosts();
+      } else {
+        displayPosts();
+      }
+    }
+
+    function showArticle(slug) {
+      currentView = 'article';
+      currentSlug = slug;
+      document.getElementById('blog-list-view').classList.add('hidden');
+      document.getElementById('blog-article-view').classList.remove('hidden');
+      
+      document.getElementById('loading-article-header').classList.remove('hidden');
+      document.getElementById('loading-article-content').classList.remove('hidden');
+      document.getElementById('article-header-content').classList.add('hidden');
+      document.getElementById('article-content-display').classList.add('hidden');
+      
+      fetchArticle(slug);
+    }
+
+    // Fetch todos los posts para paginación
+    async function fetchAllPosts() {
+      if (isLoading) return;
+      isLoading = true;
+
+      const query = encodeURIComponent(`{
+        "posts": *[_type == "post"] | order(publishedAt desc) {
+          _id,
+          title,
+          publishedAt,
+          "slug": slug.current,
+          "excerpt": body[0].children[0].text,
+          mainImage {
+            asset -> {
+              _id,
+              url
+            }
+          }
+        },
+        "total": count(*[_type == "post"])
+      }`);
+
+      const url = `https://${projectId}.api.sanity.io/v1/data/query/${dataset}?query=${query}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        allPosts = data.result.posts;
+        totalPosts = data.result.total;
+        
+        displayPosts();
+        
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+        showPostsError();
+      } finally {
+        isLoading = false;
+      }
+    }
+
+    function displayPosts() {
+      const container = document.getElementById('blog-posts');
+      
+      // Ocultar skeleton
+      const skeleton = container.querySelector('.skeleton-posts');
+      if (skeleton) {
+        skeleton.style.opacity = '0';
+        skeleton.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => {
+          if (skeleton.parentNode) {
+            skeleton.remove();
+          }
+        }, 300);
+      }
+
+      // Calcular posts para la página actual
+      const startIndex = (currentPage - 1) * postsPerPage;
+      const endIndex = startIndex + postsPerPage;
+      const postsToShow = allPosts.slice(startIndex, endIndex);
+
+      container.innerHTML = '';
+
+      postsToShow.forEach((post, index) => {
+        const el = document.createElement('article');
+        el.className = "blog-card animate-fadeInUp";
+        
+        const publishedDate = new Date(post.publishedAt);
+        const formattedDate = publishedDate.toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+
+        el.innerHTML = `
+  <div style="display: flex; align-items: center; margin-bottom: 16px;">
+    <span class="date-badge">${publishedDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })}</span>
+    <div style="margin-left: auto;">
+      <svg class="blog-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+      </svg>
+    </div>
+  </div>
+
+         ${post.mainImage?.asset?.url ? 
+ `<img src="${post.mainImage.asset.url}" alt="${post.title}" style="width: 100%; max-width: 280px; height: 160px; object-fit: cover; border-radius: 6px; margin-bottom: 16px;" />` 
+ : ''
+}
+          
+          <h2 class="blog-title">
+            ${post.title}
+          </h2>
+          
+          <p class="blog-excerpt">
+            ${post.excerpt || 'no content...'}
+          </p>
+          
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 24px;">
+            <a href="#article/${post.slug}" class="blog-btn" onclick="navigateToArticle('${post.slug}', event)">
+             read more
+              <svg style="width: 16px; height: 16px; margin-left: 8px; transition: transform 0.3s ease;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+            
+            <div style="display: flex; gap: 4px;">
+              <div style="width: 6px; height: 6px; background-color: #949dff; border-radius: 50%; opacity: 0.6;"></div>
+              <div style="width: 6px; height: 6px; background-color: #212662; border-radius: 50%; opacity: 0.6;"></div>
+              <div style="width: 6px; height: 6px; background-color: #bac0ff; border-radius: 50%; opacity: 0.6;"></div>
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(el);
+      });
+
+      // Agregar efectos hover
+      addHoverEffects();
+      
+      // Actualizar paginación
+      updatePagination();
+      
+      // Mostrar paginación
+      document.getElementById('pagination-container').classList.remove('hidden');
+    }
+
+    function addHoverEffects() {
+      const cards = document.querySelectorAll('.blog-card');
+      cards.forEach(card => {
+        const btn = card.querySelector('.blog-btn');
+        const arrow = btn.querySelector('svg');
+        
+        card.addEventListener('mouseenter', () => {
+          if (arrow) arrow.style.transform = 'translateX(4px)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          if (arrow) arrow.style.transform = 'translateX(0)';
+        });
+      });
+    }
+
+    function updatePagination() {
+      const totalPages = Math.ceil(totalPosts / postsPerPage);
+      const startPost = (currentPage - 1) * postsPerPage + 1;
+      const endPost = Math.min(currentPage * postsPerPage, totalPosts);
+
+      // Actualizar info de paginación
+      document.getElementById('pagination-info').textContent = 
+        `Showing ${startPost}-${endPost} of ${totalPosts} articles`;
+
+      // Generar botones de paginación
+      const paginationEl = document.getElementById('pagination');
+      paginationEl.innerHTML = '';
+
+      if (totalPages <= 1) return;
+
+      // Botón anterior
+      const prevBtn = createPaginationButton('❮', currentPage - 1, currentPage === 1);
+      prevBtn.classList.add('pagination-btn');
+      if (currentPage === 1) prevBtn.classList.add('disabled');
+      paginationEl.appendChild(prevBtn);
+
+      // Lógica de páginas visibles
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, currentPage + 2);
+
+      // Ajustar si estamos cerca del inicio o final
+      if (currentPage <= 3) {
+        endPage = Math.min(5, totalPages);
+      }
+      if (currentPage >= totalPages - 2) {
+        startPage = Math.max(1, totalPages - 4);
+      }
+
+      // Primera página
+      if (startPage > 1) {
+        paginationEl.appendChild(createPaginationButton(1, 1));
+        if (startPage > 2) {
+          paginationEl.appendChild(createEllipsis());
+        }
+      }
+
+      // Páginas del rango
+      for (let i = startPage; i <= endPage; i++) {
+        const btn = createPaginationButton(i, i, false, i === currentPage);
+        paginationEl.appendChild(btn);
+      }
+
+      // Última página
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          paginationEl.appendChild(createEllipsis());
+        }
+        paginationEl.appendChild(createPaginationButton(totalPages, totalPages));
+      }
+
+      // Botón siguiente
+      const nextBtn = createPaginationButton('❯', currentPage + 1, currentPage === totalPages);
+      nextBtn.classList.add('pagination-btn');
+      if (currentPage === totalPages) nextBtn.classList.add('disabled');
+      paginationEl.appendChild(nextBtn);
+    }
+
+    function createPaginationButton(text, page, disabled = false, active = false) {
+      const btn = document.createElement('button');
+      btn.className = 'pagination-btn';
+      btn.textContent = text;
+      
+      if (disabled) {
+        btn.classList.add('disabled');
+      } else if (active) {
+        btn.classList.add('active');
+      } else {
+        btn.onclick = () => goToPage(page);
+      }
+      
+      return btn;
+    }
+
+    function createEllipsis() {
+      const ellipsis = document.createElement('span');
+      ellipsis.className = 'pagination-ellipsis';
+      ellipsis.textContent = '...';
+      return ellipsis;
+    }
+
+    function goToPage(page) {
+      if (page === currentPage || page < 1 || page > Math.ceil(totalPosts / postsPerPage)) {
+        return;
+      }
+      
+      currentPage = page;
+      window.location.hash = page === 1 ? '' : `page/${page}`;
+      
+      // Scroll suave al inicio
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      displayPosts();
+    }
+
+    function changePostsPerPage(newCount) {
+      postsPerPage = parseInt(newCount);
+      currentPage = 1;
+      window.location.hash = '';
+      displayPosts();
+    }
+
+    // Fetch artículo individual
+    async function fetchArticle(slug) {
+      const query = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0] {
+        _id,
+        title,
+        publishedAt,
+        "slug": slug.current,
+        body,
+        "excerpt": body[0].children[0].text,
+        mainImage {
+          asset -> {
+            _id,
+            url
+          }
+        }
+      }`);
+
+      const url = `https://${projectId}.api.sanity.io/v1/data/query/${dataset}?query=${query}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const post = data.result;
+
+        if (!post) {
+          showArticleError('Artículo no encontrado', 'El artículo que buscas no existe o ha sido eliminado.');
+          return;
+        }
+
+        // Ocultar loading y mostrar contenido
+        document.getElementById('loading-article-header').classList.add('hidden');
+        document.getElementById('loading-article-content').classList.add('hidden');
+        document.getElementById('article-header-content').classList.remove('hidden');
+        document.getElementById('article-content-display').classList.remove('hidden');
+
+        // Actualizar título de la página
+        document.getElementById('page-title').textContent = post.title;
+
+        // Actualizar header
+        document.getElementById('article-title-display').textContent = post.title;
+        
+        const publishedDate = new Date(post.publishedAt);
+        const formattedDate = publishedDate.toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        document.getElementById('article-published-date').textContent = formattedDate;
+
+        // Convertir contenido
+        const contentHTML = convertPortableTextToHTML(post.body);
+        document.getElementById('article-content-display').innerHTML = contentHTML;
+
+        // Calcular tiempo de lectura
+        const wordCount = contentHTML.replace(/<[^>]*>/g, '').split(/\s+/).length;
+        const readingTime = Math.ceil(wordCount / 200);
+        document.getElementById('article-reading-time').textContent = `${readingTime} min de lectura`;
+
+      } catch (err) {
+        console.error("Error fetching article:", err);
+        showArticleError('Error al cargar', 'No se pudo cargar el artículo. Por favor, inténtalo más tarde.');
+      }
+    }
+
+    function convertPortableTextToHTML(portableText) {
+      if (!portableText || !Array.isArray(portableText)) {
+        return '<p>Contenido no disponible.</p>';
+      }
+
+      return portableText.map(block => {
+        if (block._type === 'block') {
+          const text = block.children?.map(child => {
+            let childText = child.text || '';
+            
+            // Aplicar marcas de formato
+            if (child.marks && child.marks.length > 0) {
+              child.marks.forEach(mark => {
+                switch (mark) {
+                  case 'strong':
+                    childText = `<strong>${childText}</strong>`;
+                    break;
+                  case 'em':
+                    childText = `<em>${childText}</em>`;
+                    break;
+                  case 'code':
+                    childText = `<code>${childText}</code>`;
+                    break;
+                }
+              });
+            }
+            
+            return childText;
+          }).join('') || '';
+          
+          switch (block.style) {
+            case 'h1':
+              return `<h1>${text}</h1>`;
+            case 'h2':
+              return `<h2>${text}</h2>`;
+            case 'h3':
+              return `<h3>${text}</h3>`;
+            case 'h4':
+              return `<h4>${text}</h4>`;
+            case 'blockquote':
+              return `<blockquote>${text}</blockquote>`;
+            default:
+              return `<p>${text}</p>`;
+          }
+        } else if (block._type === 'image') {
+          const imageUrl = block.asset?.url || '';
+          const alt = block.alt || 'Imagen del artículo';
+          return `<img src="${imageUrl}" alt="${alt}" style="width: 100%; height: auto; margin: 20px 0; border-radius: 6px;" />`;
+        }
+        return '';
+      }).join('');
+    }
+
+    function showArticleError(title, message) {
+      document.getElementById('loading-article-header').classList.add('hidden');
+      document.getElementById('loading-article-content').classList.add('hidden');
+      
+      document.getElementById('article-content-display').innerHTML = `
+        <div style="text-align: center; padding: 60px 20px;">
+          <div style="font-size: 48px; margin-bottom: 20px; color: #949dff;">📄</div>
+          <h2 style="color: #30323d; font-size: 1.5rem; font-weight: 700; margin-bottom: 12px;">
+            ${title}
+          </h2>
+          <p style="color: #30323d; margin-bottom: 24px;">
+            ${message}
+          </p>
+        </div>
+      `;
+      document.getElementById('article-content-display').classList.remove('hidden');
+    }
+
+    function showPostsError() {
+      const container = document.getElementById('blog-posts');
+      container.innerHTML = `
+        <div class="blog-card" style="text-align: center; padding: 60px 20px;">
+          <div style="font-size: 48px; margin-bottom: 20px; color: #949dff;">⚠️</div>
+          <h3 style="color: #30323d; font-size: 1.5rem; font-weight: 700; margin-bottom: 12px;">
+            Error loading posts
+          </h3>
+          <p style="color: #30323d; margin-bottom: 24px;">
+            The blog articles could not be loaded. Please try again later.          </p>
+          <button onclick="fetchAllPosts()" class="blog-btn">
+            Retry
+          </button>
+        </div>
+      `;
+    }
+
+    function navigateToArticle(slug, event) {
+      event.preventDefault();
+      window.location.hash = `article/${slug}`;
+    }
+
+    // Event listeners
+    document.getElementById('back-to-blog').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.hash = '';
+    });
+
+    // Navegación con teclado para paginación
+    document.addEventListener('keydown', (e) => {
+      if (currentView !== 'list') return;
+      
+      const totalPages = Math.ceil(totalPosts / postsPerPage);
+      
+      if (e.key === 'ArrowLeft' && currentPage > 1) {
+        goToPage(currentPage - 1);
+      } else if (e.key === 'ArrowRight' && currentPage < totalPages) {
+        goToPage(currentPage + 1);
+      }
+    });
+
+    // Router con hash
+    window.addEventListener('hashchange', handleRoute);
+    
+    window.addEventListener('load', () => {
+      handleRoute();
+      if (currentView === 'list') {
+        setTimeout(() => {
+          if (allPosts.length === 0) {
+            fetchAllPosts();
+          }
+        }, 1200);
+      }
+    });
+
+    // Función para mostrar loading en paginación
+    function showPaginationLoading() {
+      const pagination = document.getElementById('pagination');
+      pagination.classList.add('pagination-loading');
+    }
+
+    function hidePaginationLoading() {
+      const pagination = document.getElementById('pagination');
+      pagination.classList.remove('pagination-loading');
+    }
+
+    // Preload de páginas adyacentes para mejor UX
+    function preloadAdjacentPages() {
+      const totalPages = Math.ceil(totalPosts / postsPerPage);
+      
+      // Preload página anterior
+      if (currentPage > 1) {
+        const prevStart = (currentPage - 2) * postsPerPage;
+        const prevEnd = prevStart + postsPerPage;
+        // Los posts ya están cargados en allPosts
+      }
+      
+      // Preload página siguiente
+      if (currentPage < totalPages) {
+        const nextStart = currentPage * postsPerPage;
+        const nextEnd = nextStart + postsPerPage;
+        // Los posts ya están cargados en allPosts
+      }
+    }
+
+    // Optimización: lazy loading de imágenes
+    function enableLazyLoading() {
+      const images = document.querySelectorAll('img[src]');
+      
+      if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              img.classList.add('loaded');
+              observer.unobserve(img);
+            }
+          });
+        });
+
+        images.forEach(img => imageObserver.observe(img));
+      }
+    }
+
+    // Búsqueda simple (opcional)
+    function initSearch() {
+      // Esta función se puede expandir para agregar funcionalidad de búsqueda
+      // en los posts cargados
+    }
+
+    // Funciones de utilidad
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+
+    function calculateReadingTime(text) {
+      const wordsPerMinute = 200;
+      const wordCount = text.replace(/<[^>]*>/g, '').split(/\s+/).length;
+      return Math.ceil(wordCount / wordsPerMinute);
+    }
+
+    // Analytics/tracking (opcional)
+    function trackPageView(page) {
+      // Aquí puedes agregar código de analytics
+      console.log(`Page view: ${page}`);
+    }
+
+    function trackArticleView(slug) {
+      // Aquí puedes agregar código de analytics para artículos
+      console.log(`Article view: ${slug}`);
+    }
+  </script>
+</body>
+</html>
